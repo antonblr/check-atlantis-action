@@ -140,17 +140,26 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GitHubInputs = void 0;
 const core = __importStar(__nccwpck_require__(2186));
+const path_1 = __importDefault(__nccwpck_require__(1017));
 const sortByKeys = ['dir', 'name'];
 class GitHubInputs {
     get atlantisConfigPath() {
-        return core.getInput('atlantis-config-path');
+        const input_path = core.getInput('atlantis-config-path');
+        const root_dir = process.cwd();
+        if (!input_path)
+            return path_1.default.join(root_dir, 'atlantis.yaml');
+        return input_path;
     }
     get commitChange() {
         return core.getInput('commit-change') === 'true';
     }
+    // TODO
     get includeChecks() {
         if (!core.getInput('include'))
             return [];

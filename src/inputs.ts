@@ -13,9 +13,15 @@ export interface Inputs {
 
 export class GitHubInputs implements Inputs {
   get atlantisConfigPath(): string {
-    const input_path = core.getInput('atlantis-config-path')
+    let input_path = core.getInput('atlantis-config-path')
     const root_dir = process.cwd()
+
     if (!input_path) return path.join(root_dir, 'atlantis.yaml')
+
+    // Normalise relative path
+    if (!path.isAbsolute(input_path)) {
+      input_path = path.join(root_dir, input_path)
+    }
 
     return input_path
   }
