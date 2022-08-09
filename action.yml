@@ -1,7 +1,7 @@
 name: 'Check Atlantis config'
 description: 'Run set of checks on atlantis.yaml config file.'
 inputs:
-  atlantis-config-path:
+  atlantis-config:
     description: 'Absolute or relative to the root path to Atlantis config file. Defaults to ./atlantis.yaml'
     required: false
   commit-change:

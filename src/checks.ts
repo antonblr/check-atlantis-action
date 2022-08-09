@@ -20,7 +20,7 @@ type Project = {
 }
 
 export function runChecks(): boolean {
-  const file = inputs.atlantisConfigPath
+  const file = inputs.atlantisConfig
   console.log(`Running checks on ${file}...`)
 
   // Get document

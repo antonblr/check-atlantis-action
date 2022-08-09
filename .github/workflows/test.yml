@@ -1,4 +1,4 @@
-name: "build-tests"
+name: "CI"
 on: # rebuild any PRs and main branch changes
   pull_request:
   push:
@@ -22,7 +22,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: ./
       with:
-        atlantis-config-path: ./tests/atlantis.yaml
+        atlantis-config: ./tests/atlantis.yaml
         commit-change: false
         sort-by: name
         token: ${{ secrets.GITHUB_TOKEN }}

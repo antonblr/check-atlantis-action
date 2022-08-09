@@ -41,7 +41,7 @@ const path_1 = __importDefault(__nccwpck_require__(1017));
 const checks = [checkObsolete, checkOrdering];
 const inputs = new inputs_1.GitHubInputs();
 function runChecks() {
-    const file = inputs.atlantisConfigPath;
+    const file = inputs.atlantisConfig;
     console.log(`Running checks on ${file}...`);
     // Get document
     const doc = yaml.load((0, fs_1.readFileSync)(file, 'utf8'));
@@ -149,8 +149,8 @@ const core = __importStar(__nccwpck_require__(2186));
 const path_1 = __importDefault(__nccwpck_require__(1017));
 const sortByKeys = ['dir', 'name'];
 class GitHubInputs {
-    get atlantisConfigPath() {
-        let input_path = core.getInput('atlantis-config-path');
+    get atlantisConfig() {
+        let input_path = core.getInput('atlantis-config');
         const root_dir = process.cwd();
         if (!input_path)
             return path_1.default.join(root_dir, 'atlantis.yaml');
@@ -230,7 +230,7 @@ function run() {
         const success = (0, checks_1.runChecks)();
         // Commit updated atlantis.yaml back to PR, if changed
         if (inputs.commitChange && !success) {
-            (0, git_1.addCommitAndPush)(inputs.atlantisConfigPath);
+            (0, git_1.addCommitAndPush)(inputs.atlantisConfig);
         }
     }
     catch (error) {

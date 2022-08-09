@@ -12,7 +12,7 @@ function run(): void {
 
     // Commit updated atlantis.yaml back to PR, if changed
     if (inputs.commitChange && !success) {
-      addCommitAndPush(inputs.atlantisConfigPath)
+      addCommitAndPush(inputs.atlantisConfig)
     }
   } catch (error) {
     if (error instanceof Error) {

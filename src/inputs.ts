@@ -4,7 +4,7 @@ import path from 'path'
 const sortByKeys = ['dir', 'name']
 
 export interface Inputs {
-  atlantisConfigPath: string
+  atlantisConfig: string
   commitChange: boolean
   includeChecks: string[]
   projectsSortBy: string
@@ -12,8 +12,8 @@ export interface Inputs {
 }
 
 export class GitHubInputs implements Inputs {
-  get atlantisConfigPath(): string {
-    let input_path = core.getInput('atlantis-config-path')
+  get atlantisConfig(): string {
+    let input_path = core.getInput('atlantis-config')
     const root_dir = process.cwd()
 
     if (!input_path) return path.join(root_dir, 'atlantis.yaml')

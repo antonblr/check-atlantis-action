@@ -15,7 +15,7 @@ test('test terraform/atlantis.yaml', () => {
   }
 
   // Mock GitHub action inputs
-  setInput('atlantis-config-path', 'tests/atlantis.yaml')
+  setInput('atlantis-config', 'tests/atlantis.yaml')
   setInput('sort-by', 'dir')
 
   // first pass should sort and remove obsolete projects
