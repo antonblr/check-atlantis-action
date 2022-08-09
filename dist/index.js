@@ -150,10 +150,14 @@ const path_1 = __importDefault(__nccwpck_require__(1017));
 const sortByKeys = ['dir', 'name'];
 class GitHubInputs {
     get atlantisConfigPath() {
-        const input_path = core.getInput('atlantis-config-path');
+        let input_path = core.getInput('atlantis-config-path');
         const root_dir = process.cwd();
         if (!input_path)
             return path_1.default.join(root_dir, 'atlantis.yaml');
+        // Normalise relative path
+        if (!path_1.default.isAbsolute(input_path)) {
+            input_path = path_1.default.join(root_dir, input_path);
+        }
         return input_path;
     }
     get commitChange() {
@@ -215,12 +219,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-// https://docs.github.com/en/actions/learn-github-actions/environment-variables
-// https://www.npmjs.com/package/@octokit/rest
-// Typescript action: https://github.com/peter-evans/create-pull-request
-// Typescript action: https://github.com/gr2m/create-or-update-pull-request-action
-// Typescript action: https://github.com/fjogeleit/yaml-update-action
-// Template for Typescript action: https://github.com/actions/typescript-action
 const core = __importStar(__nccwpck_require__(2186));
 const inputs_1 = __nccwpck_require__(6180);
 const git_1 = __nccwpck_require__(3374);
