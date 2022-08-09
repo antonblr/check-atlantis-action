@@ -1,5 +1,4 @@
-name: "javascript-action CodeQL config"
+name : CodeQL Configuration
 
-paths-ignore: 
-  - node_modules
-  - dist
+paths:
+  - './src'

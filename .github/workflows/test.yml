@@ -1,5 +1,5 @@
-name: "units-test"
-on:
+name: "build-tests"
+on: # rebuild any PRs and main branch changes
   pull_request:
   push:
     branches:
@@ -7,14 +7,15 @@ on:
       - 'releases/*'
 
 jobs:
-  units:
+  # make sure build/ci work properly
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - run: npm ci
-    - run: npm test
+    - run: npm install
+    - run: npm run all
 
-  # test action works running from the graph
+  # make sure the action works on a clean machine without building
   test:
     runs-on: ubuntu-latest
     steps:
