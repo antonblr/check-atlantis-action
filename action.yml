@@ -2,22 +2,19 @@ name: 'Check Atlantis config'
 description: 'Run set of checks on atlantis.yaml config file.'
 inputs:
   atlantis-config-path:
-    description: 'Path to atlantis.yaml file'
-    default: './atlantis.yaml'
+    description: 'Full path to Atlantis config file. Default is atlantis.yaml in the root directory'
+    default: 'atlantis.yaml'
     required: true
   commit-change:
     description: 'Commit the necessary updates back to PR'
     default: 'false'
     required: false
-  exclude:
-    description: 'Exclude some checks'
-    required: false
-  projects-order-by:
-    description: 'Sort atlantis projects by the given key'
+  sort-by:
+    description: 'Sort atlantis projects by the given key ("name" or "dir")'
     default: 'dir'
     required: false
   token:
-    description: 'GitHub AuthToken for Authorization'
+    description: 'GitHub auth token. For most cases set it to secrets.GITHUB_TOKEN'
     default: ${{ github.token }}
     required: false
 runs:
