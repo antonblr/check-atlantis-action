@@ -7,6 +7,6 @@ export function addCommitAndPush(file: string): void {
     `git config --local user.email "github-action-${context.actor}@users.noreply.github.com"`
   )
   exec(`git add ${file}`)
-  exec(`git commit -m "ci: fix ${file}"`)
+  exec(`git commit -m "ci: fix atlantis.yaml configuration"`)
   exec('git push')
 }

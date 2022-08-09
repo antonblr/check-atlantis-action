@@ -104,7 +104,7 @@ function addCommitAndPush(file) {
     (0, exec_1.exec)(`git config --local user.name "${github_1.context.actor}"`);
     (0, exec_1.exec)(`git config --local user.email "github-action-${github_1.context.actor}@users.noreply.github.com"`);
     (0, exec_1.exec)(`git add ${file}`);
-    (0, exec_1.exec)(`git commit -m "ci: fix ${file}"`);
+    (0, exec_1.exec)(`git commit -m "ci: fix atlantis.yaml configuration"`);
     (0, exec_1.exec)('git push');
 }
 exports.addCommitAndPush = addCommitAndPush;
