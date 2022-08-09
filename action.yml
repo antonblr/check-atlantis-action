@@ -3,8 +3,7 @@ description: 'Run set of checks on atlantis.yaml config file.'
 inputs:
   atlantis-config-path:
     description: 'Full path to Atlantis config file. Default is atlantis.yaml in the root directory'
-    default: 'atlantis.yaml'
-    required: true
+    required: false
   commit-change:
     description: 'Commit the necessary updates back to PR'
     default: 'false'

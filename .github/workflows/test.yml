@@ -24,3 +24,4 @@ jobs:
       with:
         commit-change: false
         sort-by: name
+        token: ${{ secrets.GITHUB_TOKEN }}

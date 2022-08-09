@@ -1,4 +1,5 @@
 import * as core from '@actions/core'
+import path from 'path'
 
 const sortByKeys = ['dir', 'name']
 
@@ -12,13 +13,18 @@ export interface Inputs {
 
 export class GitHubInputs implements Inputs {
   get atlantisConfigPath(): string {
-    return core.getInput('atlantis-config-path')
+    const input_path = core.getInput('atlantis-config-path')
+    const root_dir = process.cwd()
+    if (!input_path) return path.join(root_dir, 'atlantis.yaml')
+
+    return input_path
   }
 
   get commitChange(): boolean {
     return core.getInput('commit-change') === 'true'
   }
 
+  // TODO
   get includeChecks(): string[] {
     if (!core.getInput('include')) return []
 
