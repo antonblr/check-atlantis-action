@@ -1,0 +1,16 @@
+version: 3
+projects:
+  - name: module-a
+    dir: src
+    autoplan:
+      when_modified:
+        - "*.tf"
+    workflow: dev
+    apply_requirements: [approved]
+  - name: module-b
+    dir: tests
+    autoplan:
+      when_modified:
+        - "*.tf"
+    workflow: dev
+    apply_requirements: [approved]
