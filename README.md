@@ -7,16 +7,30 @@ A GitHub action to check [Atlantis](https://www.runatlantis.io/) (Terraform Pull
 ### Usage
 
 ```yaml
-- uses: actions/checkout@v3
-  with:
-    # https://github.com/actions/checkout/issues/719
-    fetch-depth: 0
-    ref: ${{ github.event.pull_request.head.ref }}
+name: Check Atlantis
+on:
+  # only run on PRs
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - '.github/workflows/atlantis.yml'
+      - 'atlantis.yaml'
+      - '**.tf'
 
-- uses: antonblr/check-atlantis-action@v0
-  with:
-    commit-change: 'true'
-    sort-by: 'name'
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+     - uses: actions/checkout@v3
+       with:
+         # https://github.com/actions/checkout/issues/719
+         fetch-depth: 0
+         ref: ${{ github.event.pull_request.head.ref }}
+
+     - uses: antonblr/check-atlantis-action@v0
+       with:
+         commit-change: 'true'
+         sort-by: 'name'
 ```
 
 ### Action inputs
