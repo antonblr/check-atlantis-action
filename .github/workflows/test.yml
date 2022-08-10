@@ -11,6 +11,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 16.x
     - uses: actions/checkout@v3
     - run: npm install
     - run: npm run all
@@ -20,8 +23,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+      with:
+        # https://github.com/actions/checkout/issues/719
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.ref }}
+
     - name: Run check-atlantis-action
       uses: ./
       with:
         atlantis-config: tests/atlantis-valid.yaml
         sort-by: dir
+        commit-change: false

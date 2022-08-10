@@ -8,7 +8,6 @@ export interface Inputs {
   commitChange: boolean
   includeChecks: string[]
   projectsSortBy: string
-  token: string
 }
 
 /**
@@ -55,9 +54,5 @@ export class GitHubInputs implements Inputs {
       throw new Error(`Invalid sort-by key ${key}. Allowed: ${sortByKeys}`)
     }
     return key
-  }
-
-  get token(): string {
-    return core.getInput('token')
   }
 }
