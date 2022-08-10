@@ -34,22 +34,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.checkOrdering = exports.checkObsolete = exports.runChecks = void 0;
+const core = __importStar(__nccwpck_require__(2186));
 const yaml = __importStar(__nccwpck_require__(1917));
 const fs_1 = __nccwpck_require__(7147);
 const inputs_1 = __nccwpck_require__(6180);
 const path_1 = __importDefault(__nccwpck_require__(1017));
 const checks = [checkObsolete, checkOrdering];
-const inputs = new inputs_1.GitHubInputs();
 function runChecks() {
+    const inputs = new inputs_1.GitHubInputs();
     const file = inputs.atlantisConfig;
-    console.log(`Running checks on ${file}...`);
+    core.info(`Running checks on ${file}...`);
     // Get document
     const doc = yaml.load((0, fs_1.readFileSync)(file, 'utf8'));
     const projects = doc.projects;
     const results = [];
     for (const check of checks) {
+        core.startGroup(`Running ${check.name}`);
         const status = check(projects);
-        console.log(`${check.name} => ${status}`);
+        core.info(`check status => '${status}'`);
+        core.endGroup();
         results.push(status);
     }
     // Write processed document back
@@ -58,13 +61,13 @@ function runChecks() {
 }
 exports.runChecks = runChecks;
 function checkObsolete(document) {
-    console.info(`Check obsolete projects...`);
+    core.info(`Check obsolete projects...`);
     let checkStatus = 'ok';
     const root_dir = process.cwd();
     for (const [index, item] of document.entries()) {
         if (!(0, fs_1.existsSync)(path_1.default.join(root_dir, item.dir))) {
             checkStatus = 'fail';
-            console.warn(`\tcleanup project {name: '${item.name}'}`);
+            core.error(`\tcleanup project {name: '${item.name}'}`);
             document.splice(index, 1);
         }
     }
@@ -72,9 +75,11 @@ function checkObsolete(document) {
 }
 exports.checkObsolete = checkObsolete;
 function checkOrdering(document) {
+    const inputs = new inputs_1.GitHubInputs();
+    const file = inputs.atlantisConfig;
     const key = inputs.projectsSortBy;
     let checkStatus = 'ok';
-    console.info(`Sort projects by '${key}' key...`);
+    core.info(`Sort projects by '${key}' key...`);
     document.sort(function (a, b) {
         if (a[key] > b[key]) {
             return 1;
@@ -84,6 +89,9 @@ function checkOrdering(document) {
             return -1;
         }
     });
+    if (checkStatus === 'fail') {
+        core.error(`${path_1.default.basename(file)} was not sorted by '${key}' key properly`);
+    }
     return checkStatus;
 }
 exports.checkOrdering = checkOrdering;
@@ -92,15 +100,40 @@ exports.checkOrdering = checkOrdering;
 /***/ }),
 
 /***/ 3374:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.addCommitAndPush = void 0;
+const core = __importStar(__nccwpck_require__(2186));
 const exec_1 = __nccwpck_require__(1514);
 const github_1 = __nccwpck_require__(5438);
 function addCommitAndPush(file) {
+    core.info(`Committing the fixed ${file} file`);
     (0, exec_1.exec)(`git config --local user.name "${github_1.context.actor}"`);
     (0, exec_1.exec)(`git config --local user.email "github-action-${github_1.context.actor}@users.noreply.github.com"`);
     (0, exec_1.exec)(`git add ${file}`);
@@ -144,17 +177,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.GitHubInputs = void 0;
+exports.GitHubInputs = exports.getRequiredEnvParam = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const path_1 = __importDefault(__nccwpck_require__(1017));
 const sortByKeys = ['dir', 'name'];
+/**
+ * Get an environment parameter, but throw an error if it is not set.
+ */
+function getRequiredEnvParam(paramName) {
+    const value = process.env[paramName];
+    if (value === undefined || value.length === 0) {
+        throw new Error(`${paramName} environment variable must be set`);
+    }
+    return value;
+}
+exports.getRequiredEnvParam = getRequiredEnvParam;
 class GitHubInputs {
     get atlantisConfig() {
         let atlantisConf = core.getInput('atlantis-config');
         if (!atlantisConf) {
             atlantisConf = 'atlantis.yaml';
         }
-        return path_1.default.resolve(process.env['GITHUB_WORKSPACE'], atlantisConf);
+        return path_1.default.resolve(getRequiredEnvParam('GITHUB_WORKSPACE'), atlantisConf);
     }
     get commitChange() {
         return core.getInput('commit-change') === 'true';
@@ -172,8 +216,7 @@ class GitHubInputs {
     get projectsSortBy() {
         const key = core.getInput('sort-by');
         if (!sortByKeys.includes(key)) {
-            // error
-            console.error(`Invalid sort-by key ${key}. Only ${sortByKeys} allowed.`);
+            throw new Error(`Invalid sort-by key ${key}. Allowed: ${sortByKeys}`);
         }
         return key;
     }
@@ -227,6 +270,9 @@ function run() {
         // Commit updated atlantis.yaml back to PR, if changed
         if (inputs.commitChange && !success) {
             (0, git_1.addCommitAndPush)(inputs.atlantisConfig);
+        }
+        else if (!success) {
+            core.setFailed('Some of the checks are failed.');
         }
     }
     catch (error) {

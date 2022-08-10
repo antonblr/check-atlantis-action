@@ -1,10 +1,10 @@
+import * as core from '@actions/core'
 import * as yaml from 'js-yaml'
 import {existsSync, readFileSync, writeFileSync} from 'fs'
 import {GitHubInputs} from './inputs'
 import path from 'path'
 
 const checks = [checkObsolete, checkOrdering]
-const inputs = new GitHubInputs()
 
 type AtlantisConfig = {
   version: number
@@ -20,8 +20,9 @@ type Project = {
 }
 
 export function runChecks(): boolean {
+  const inputs = new GitHubInputs()
   const file = inputs.atlantisConfig
-  console.log(`Running checks on ${file}...`)
+  core.info(`Running checks on ${file}...`)
 
   // Get document
   const doc = yaml.load(readFileSync(file, 'utf8')) as AtlantisConfig
@@ -29,8 +30,10 @@ export function runChecks(): boolean {
 
   const results: string[] = []
   for (const check of checks) {
+    core.startGroup(`Running ${check.name}`)
     const status = check(projects)
-    console.log(`${check.name} => ${status}`)
+    core.info(`check status => '${status}'`)
+    core.endGroup()
     results.push(status)
   }
 
@@ -40,14 +43,14 @@ export function runChecks(): boolean {
 }
 
 export function checkObsolete(document: Project[]): string {
-  console.info(`Check obsolete projects...`)
+  core.info(`Check obsolete projects...`)
   let checkStatus = 'ok'
 
   const root_dir = process.cwd()
   for (const [index, item] of document.entries()) {
     if (!existsSync(path.join(root_dir, item.dir))) {
       checkStatus = 'fail'
-      console.warn(`\tcleanup project {name: '${item.name}'}`)
+      core.error(`\tcleanup project {name: '${item.name}'}`)
       document.splice(index, 1)
     }
   }
@@ -56,10 +59,12 @@ export function checkObsolete(document: Project[]): string {
 }
 
 export function checkOrdering(document: Project[]): string {
+  const inputs = new GitHubInputs()
+  const file = inputs.atlantisConfig
   const key = inputs.projectsSortBy as keyof Project
   let checkStatus = 'ok'
 
-  console.info(`Sort projects by '${key}' key...`)
+  core.info(`Sort projects by '${key}' key...`)
 
   document.sort(function (a, b) {
     if (a[key] > b[key]) {
@@ -69,6 +74,9 @@ export function checkOrdering(document: Project[]): string {
       return -1
     }
   })
+  if (checkStatus === 'fail') {
+    core.error(`${path.basename(file)} was not sorted by '${key}' key properly`)
+  }
 
   return checkStatus
 }

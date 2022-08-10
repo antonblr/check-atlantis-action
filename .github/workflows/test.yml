@@ -20,9 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: ./
+    - name: Run check-atlantis-action
+      uses: ./
       with:
-        atlantis-config: tests/atlantis.yaml
-        commit-change: false
-        sort-by: name
-        token: ${{ secrets.GITHUB_TOKEN }}
+        atlantis-config: tests/atlantis-valid.yaml
+        sort-by: dir
