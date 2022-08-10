@@ -18,9 +18,9 @@ A GitHub action to check [Atlantis](https://www.runatlantis.io/) (Terraform Pull
 
 ### Action inputs
 
-| Name              | Description                                                                                        | Default                                |
-|-------------------|----------------------------------------------------------------------------------------------------|----------------------------------------|
-| `atlantis-config` | Path to `atlantis.yaml` file. Can be relative to the project root or abosulte.                     | `./atlantis.yaml` in the projects root |
-| `commit-change`   | Commit updated (sorted and cleaned-up) `atlantis.yaml` back to the PR that triggered the workflow. | `false`                                |
-| `sort-by`         | Key name to sort atlantis projects by. Valid values are `dir` or `name`.                           | `dir`                                  |
+| Name              | Description                                                                                        | Default           |
+|-------------------|----------------------------------------------------------------------------------------------------|-------------------|
+| `atlantis-config` | Path to `atlantis.yaml` file, relative to `$GITHUB_WORKSPACE` (projects' root).                    | `./atlantis.yaml` |
+| `commit-change`   | Commit updated (sorted and cleaned-up) `atlantis.yaml` back to the PR that triggered the workflow. | `false`           |
+| `sort-by`         | Key name to sort atlantis projects by. Valid values are `dir` or `name`.                           | `dir`             |
 | `token`           | `secrets.GITHUB_TOKEN` or a repo scoped Personal Access Token (PAT).                               |             |

@@ -3,29 +3,45 @@ import * as checks from '../src/checks'
 import {mkdirSync, rmdirSync} from 'fs'
 import * as path from 'path'
 
+const originalGitHubWorkspace = process.env['GITHUB_WORKSPACE']
+
 function setInput(name: string, value: string): void {
   process.env[`INPUT_${name.replace(/ /g, '_').toUpperCase()}`] = value
 }
 
-test('test terraform/atlantis.yaml', () => {
-  const directories = ['a/b/', 'a/c/a/', 'a/c/b/']
-  console.log('Creating test directories...')
-  for (const d of directories) {
-    mkdirSync(path.join(__dirname, d), {recursive: true})
-  }
+describe('utils tests', () => {
+  beforeAll(() => {
+    // GitHub workspace
+    process.env['GITHUB_WORKSPACE'] = __dirname
+  })
 
-  // Mock GitHub action inputs
-  setInput('atlantis-config', 'tests/atlantis.yaml')
-  setInput('sort-by', 'dir')
+  afterAll(() => {
+    // Restore GitHub workspace
+    delete process.env['GITHUB_WORKSPACE']
+    if (originalGitHubWorkspace) {
+      process.env['GITHUB_WORKSPACE'] = originalGitHubWorkspace
+    }
+  })
 
-  // first pass should sort and remove obsolete projects
-  const status1 = checks.runChecks()
-  expect(status1).toBeFalsy()
+  test('test terraform/atlantis.yaml', () => {
+    const directories = ['a/b/', 'a/c/a/', 'a/c/b/']
+    console.log('Creating test directories...')
+    for (const d of directories) {
+      mkdirSync(path.join(__dirname, d), {recursive: true})
+    }
 
-  // second pass should need no modifications
-  const status2 = checks.runChecks()
-  expect(status2).toBeTruthy()
+    // Mock GitHub actions input
+    setInput('sort-by', 'dir')
 
-  console.log('Cleanup test directories...')
-  rmdirSync(path.join(__dirname, 'a'), {recursive: true})
+    // first pass should sort and remove obsolete projects
+    const status1 = checks.runChecks()
+    expect(status1).toBeFalsy()
+
+    // second pass should need no modifications
+    const status2 = checks.runChecks()
+    expect(status2).toBeTruthy()
+
+    console.log('Cleanup test directories...')
+    rmdirSync(path.join(__dirname, 'a'), {recursive: true})
+  })
 })
