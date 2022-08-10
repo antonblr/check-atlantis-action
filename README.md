@@ -1,6 +1,6 @@
 # Check Atlantis configuration
 
-[![CI](https://github.com/antonblr/check-atlantis/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/antonblr/check-atlantis/actions/workflows/test.yml?query=branch:main)
+[![CI](https://github.com/antonblr/check-atlantis-action/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/antonblr/check-atlantis-action/actions/workflows/test.yml?query=branch:main)
 
 A GitHub action to check [Atlantis](https://www.runatlantis.io/) (Terraform Pull Request Automation) configuration file (`atlantis.yaml`) for obsolete projects and projects ordering. Optionally commit the cleanup / sorting results back to PR.
 
@@ -8,7 +8,7 @@ A GitHub action to check [Atlantis](https://www.runatlantis.io/) (Terraform Pull
 
 ```yaml
 - uses: actions/checkout@v3
-- uses: antonblr/check-atlantis@v0
+- uses: antonblr/check-atlantis-action@v0
   with:
     commit-change: 'true'
     sort-by: 'name'
