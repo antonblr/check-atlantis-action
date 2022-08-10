@@ -1,7 +1,7 @@
 import {expect, test} from '@jest/globals'
-import * as checks from '../src/checks'
 import {mkdirSync, rmdirSync} from 'fs'
 import * as path from 'path'
+import * as checks from '../src/checks'
 
 const originalGitHubWorkspace = process.env['GITHUB_WORKSPACE']
 
