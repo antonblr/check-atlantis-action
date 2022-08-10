@@ -1,5 +1,5 @@
 name: 'Check Atlantis configuration file'
-description: 'Run set of checks on "atlantis.yaml" config file.'
+description: 'Keep "atlantis.yaml" clean and ordered.'
 inputs:
   atlantis-config:
     description: 'Path to "atlantis.yaml" file, relative to $GITHUB_WORKSPACE. Defaults to ./atlantis.yaml'
