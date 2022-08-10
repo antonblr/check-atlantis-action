@@ -13,6 +13,8 @@ function run(): void {
     // Commit updated atlantis.yaml back to PR, if changed
     if (inputs.commitChange && !success) {
       addCommitAndPush(inputs.atlantisConfig)
+    } else if (!success) {
+      core.setFailed('Some of the checks are failed.')
     }
   } catch (error) {
     if (error instanceof Error) {

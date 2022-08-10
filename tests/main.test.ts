@@ -9,7 +9,7 @@ function setInput(name: string, value: string): void {
   process.env[`INPUT_${name.replace(/ /g, '_').toUpperCase()}`] = value
 }
 
-describe('utils tests', () => {
+describe('action tests', () => {
   beforeAll(() => {
     // GitHub workspace
     process.env['GITHUB_WORKSPACE'] = __dirname
@@ -23,7 +23,7 @@ describe('utils tests', () => {
     }
   })
 
-  test('test terraform/atlantis.yaml', () => {
+  test('run all checks', () => {
     const directories = ['a/b/', 'a/c/a/', 'a/c/b/']
     console.log('Creating test directories...')
     for (const d of directories) {

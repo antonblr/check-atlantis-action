@@ -11,6 +11,17 @@ export interface Inputs {
   token: string
 }
 
+/**
+ * Get an environment parameter, but throw an error if it is not set.
+ */
+export function getRequiredEnvParam(paramName: string): string {
+  const value = process.env[paramName]
+  if (value === undefined || value.length === 0) {
+    throw new Error(`${paramName} environment variable must be set`)
+  }
+  return value
+}
+
 export class GitHubInputs implements Inputs {
   get atlantisConfig(): string {
     let atlantisConf = core.getInput('atlantis-config')
@@ -19,7 +30,7 @@ export class GitHubInputs implements Inputs {
       atlantisConf = 'atlantis.yaml'
     }
 
-    return path.resolve(process.env['GITHUB_WORKSPACE'] as string, atlantisConf)
+    return path.resolve(getRequiredEnvParam('GITHUB_WORKSPACE'), atlantisConf)
   }
 
   get commitChange(): boolean {
@@ -41,8 +52,7 @@ export class GitHubInputs implements Inputs {
     const key = core.getInput('sort-by')
 
     if (!sortByKeys.includes(key)) {
-      // error
-      console.error(`Invalid sort-by key ${key}. Only ${sortByKeys} allowed.`)
+      throw new Error(`Invalid sort-by key ${key}. Allowed: ${sortByKeys}`)
     }
     return key
   }
