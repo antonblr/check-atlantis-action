@@ -56,7 +56,7 @@ function runChecks() {
         results.push(status);
     }
     // Write processed document back
-    (0, fs_1.writeFileSync)(file, yaml.dump(doc, { flowLevel: 6, quotingType: '"' }));
+    (0, fs_1.writeFileSync)(file, yaml.dump(doc, { flowLevel: 6, quotingType: '"', lineWidth: 120 }));
     return results.every(val => val === 'ok');
 }
 exports.runChecks = runChecks;

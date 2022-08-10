@@ -38,7 +38,10 @@ export function runChecks(): boolean {
   }
 
   // Write processed document back
-  writeFileSync(file, yaml.dump(doc, {flowLevel: 6, quotingType: '"'}))
+  writeFileSync(
+    file,
+    yaml.dump(doc, {flowLevel: 6, quotingType: '"', lineWidth: 120})
+  )
   return results.every(val => val === 'ok')
 }
 
