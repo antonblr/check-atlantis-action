@@ -150,15 +150,11 @@ const path_1 = __importDefault(__nccwpck_require__(1017));
 const sortByKeys = ['dir', 'name'];
 class GitHubInputs {
     get atlantisConfig() {
-        let input_path = core.getInput('atlantis-config');
-        const root_dir = process.cwd();
-        if (!input_path)
-            return path_1.default.join(root_dir, 'atlantis.yaml');
-        // Normalise relative path
-        if (!path_1.default.isAbsolute(input_path)) {
-            input_path = path_1.default.join(root_dir, input_path);
+        let atlantisConf = core.getInput('atlantis-config');
+        if (!atlantisConf) {
+            atlantisConf = 'atlantis.yaml';
         }
-        return input_path;
+        return path_1.default.resolve(process.env['GITHUB_WORKSPACE'], atlantisConf);
     }
     get commitChange() {
         return core.getInput('commit-change') === 'true';

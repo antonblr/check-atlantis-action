@@ -1,5 +1,5 @@
 {
-  "name": "check-atlantis",
+  "name": "check-atlantis-action",
   "version": "0.0.1",
   "description": "Run set of checks on atlantis.yaml config file",
   "main": "lib/main.js",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/antonblr/check-atlantis.git"
+    "url": "git+https://github.com/antonblr/check-atlantis-action.git"
   },
   "keywords": [
     "github",
@@ -24,9 +24,9 @@
   "author": "@antonblr",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/antonblr/check-atlantis/issues"
+    "url": "https://github.com/antonblr/check-atlantis-action/issues"
   },
-  "homepage": "https://github.com/antonblr/check-atlantis#readme",
+  "homepage": "https://github.com/antonblr/check-atlantis-action#readme",
   "dependencies": {
     "@actions/core": "^1.9.0",
     "@actions/exec": "^1.1.1",

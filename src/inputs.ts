@@ -13,17 +13,13 @@ export interface Inputs {
 
 export class GitHubInputs implements Inputs {
   get atlantisConfig(): string {
-    let input_path = core.getInput('atlantis-config')
-    const root_dir = process.cwd()
+    let atlantisConf = core.getInput('atlantis-config')
 
-    if (!input_path) return path.join(root_dir, 'atlantis.yaml')
-
-    // Normalise relative path
-    if (!path.isAbsolute(input_path)) {
-      input_path = path.join(root_dir, input_path)
+    if (!atlantisConf) {
+      atlantisConf = 'atlantis.yaml'
     }
 
-    return input_path
+    return path.resolve(process.env['GITHUB_WORKSPACE'] as string, atlantisConf)
   }
 
   get commitChange(): boolean {
