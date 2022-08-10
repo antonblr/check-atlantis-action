@@ -1,5 +1,5 @@
-name: 'Check Atlantis config'
-description: 'Run set of checks on atlantis.yaml config file.'
+name: 'Check Atlantis configuration file'
+description: 'Run set of checks on "atlantis.yaml" config file.'
 inputs:
   atlantis-config:
     description: 'Path to "atlantis.yaml" file, relative to $GITHUB_WORKSPACE. Defaults to ./atlantis.yaml'
@@ -16,6 +16,9 @@ inputs:
     description: 'GitHub auth token. For most cases set it to secrets.GITHUB_TOKEN'
     default: ${{ github.token }}
     required: false
+branding:
+  icon: 'check-circle'
+  color: 'white'
 runs:
   using: 'node16'
   main: 'dist/index.js'
