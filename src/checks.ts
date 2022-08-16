@@ -70,7 +70,7 @@ export function checkOrdering(document: Project[]): string {
   core.info(`Sort projects by '${key}' key...`)
 
   document.sort(function (a, b) {
-    if (a[key] > b[key]) {
+    if (a[key] >= b[key]) {
       return 1
     } else {
       checkStatus = 'fail'

@@ -81,7 +81,7 @@ function checkOrdering(document) {
     let checkStatus = 'ok';
     core.info(`Sort projects by '${key}' key...`);
     document.sort(function (a, b) {
-        if (a[key] > b[key]) {
+        if (a[key] >= b[key]) {
             return 1;
         }
         else {
