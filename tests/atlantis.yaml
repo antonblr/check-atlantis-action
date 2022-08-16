@@ -1,5 +1,14 @@
 version: 3
 projects:
+  - name: module-b-2
+    dir: tests/a/b
+    autoplan:
+      when_modified:
+        - "*.tf"
+        - modules/a/*.tf
+    workflow: dev
+    apply_requirements:
+      - approved
   - name: module-b
     dir: tests/a/b
     autoplan:
@@ -8,25 +17,29 @@ projects:
         - "*.tfvars"
         - modules/a/*.tf
     workflow: dev
-    apply_requirements: [approved]
+    apply_requirements:
+      - approved
   - name: module-a
     dir: tests/a/c/b
     autoplan:
       when_modified:
         - "*.tf"
     workflow: dev
-    apply_requirements: [approved]
+    apply_requirements:
+      - approved
   - name: module-foo
     dir: foo/bar
     autoplan:
       when_modified:
         - "*.tf"
     workflow: prod
-    apply_requirements: [approved]
+    apply_requirements:
+      - approved
   - name: module-c
     dir: tests/a/c/a
     autoplan:
       when_modified:
         - "*.tf"
     workflow: dev
-    apply_requirements: [approved]
+    apply_requirements:
+      - approved
