@@ -1,6 +1,6 @@
 {
   "name": "check-atlantis-action",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Run set of checks on atlantis.yaml config file",
   "main": "lib/main.js",
   "scripts": {
